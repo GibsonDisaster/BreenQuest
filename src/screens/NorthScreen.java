@@ -2,6 +2,7 @@ package screens;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -48,6 +49,8 @@ public class NorthScreen extends BasicGameState {
 		for (FireBall f : fireballs) {
 			fireball.draw(f.getX(), f.getY());
 		}
+		g.setColor(Color.white);
+		g.drawString(Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override

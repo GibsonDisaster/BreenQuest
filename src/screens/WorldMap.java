@@ -19,14 +19,13 @@ import entities.Wall;
 
 public class WorldMap extends BasicGameState {
 	
-	private Image map, player_img, fire_img, ogre_img;
+	private Image map, player_img, fire_img, ogre_img, ogre_dead;
 	private static Player player;
 	private Enemy ogre;
 	private ArrayList<FireBall> fireballs;
 
 	public WorldMap(int playScreen) {
 		player = new Player(360, 260, 40, 40, 0);
-		ogre = new Enemy(100, 100, 40, 40, 4);
 		fireballs = new ArrayList<>();
 	}
 	
@@ -40,6 +39,7 @@ public class WorldMap extends BasicGameState {
 			player.setX(760);
 		} else if (player.getLastScreen().equals("south"))
 			player.setY(560);
+		player.setLastScreen("hub");
 	}
 
 	public void leave(GameContainer gc, StateBasedGame sbg) {
@@ -52,6 +52,7 @@ public class WorldMap extends BasicGameState {
 		player_img = new Image("res/player.png");
 		fire_img = new Image("res/fireball.png");
 		ogre_img = new Image("res/ogre.png");
+		ogre_dead = new Image("res/ogre_dead.png");
 	}
 
 	@Override
@@ -63,9 +64,8 @@ public class WorldMap extends BasicGameState {
 		for (FireBall f : fireballs) {
 			fire_img.draw(f.getX(), f.getY());
 		}
-		
-		if (ogre.getHealth() > 0)
-			ogre_img.draw(ogre.getX(), ogre.getY());
+		g.setColor(Color.white);
+		g.drawString(Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override
@@ -90,10 +90,6 @@ public class WorldMap extends BasicGameState {
 		
 		for (FireBall f : fireballs) {
 			f.update();
-			if (collide(f, ogre)) {
-				ogre.takeDamage(f.getDamage());
-				f.setX(60000);
-			}
 		}
 		
 		if (player.getX() < 0)

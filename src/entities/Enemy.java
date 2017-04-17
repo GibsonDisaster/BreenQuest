@@ -2,16 +2,50 @@ package entities;
 
 import java.awt.Rectangle;
 
+import screens.WorldMap;
+
 public class Enemy {
 
 	private int x, y, width, height, health;
-
-	public Enemy(int x, int y, int width, int height, int health) {
+	Player player;
+	int px, py = 0;
+	private boolean alive;
+	private String name;
+	
+	public Enemy(int x, int y, int width, int height, int health, String name) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.health = 4;
+		this.health = health;
+		this.alive = true;
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void getLocation() {
+		player = WorldMap.getPlayer();
+		px = player.getX();
+		py = player.getY();
+	}
+	
+	public void follow() {
+		if (this.x != px) {
+			if (this.x > px) {
+				this.x -= 1;
+			} else {
+				this.x += 1;
+			}
+		} else if (this.y != py) {
+			if (this.y > py) {
+				this.y -= 1;
+			} else {
+				this.y += 1;
+			}
+		}
 	}
 
 	//Getters and Setters
@@ -57,6 +91,14 @@ public class Enemy {
 	
 	public Rectangle bounds() {
 		return new Rectangle(this.x, this.y, this.width, this.height);
+	}
+
+	public boolean isAlive() {
+		return this.alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
 	}
 	
 }
