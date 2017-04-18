@@ -73,7 +73,10 @@ public class EastScreen extends BasicGameState {
 			player.setDir(3);
 		} else if (input.isKeyPressed(input.KEY_SPACE)) { 
 			fireballs.add(new FireBall(player.getX(), player.getY(), 20, 20, player.getDir()));
-		}
+		} else if (input.isKeyPressed(input.KEY_H))
+			sbg.enterState(7);
+		else if (input.isKeyPressed(input.KEY_I))
+			sbg.enterState(8);
 		
 		for (FireBall f : fireballs) {
 			f.update();
