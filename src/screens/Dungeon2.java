@@ -91,7 +91,7 @@ public class Dungeon2 extends BasicGameState {
 		
 		player_img.draw(player.getX(), player.getY());
 		g.setColor(Color.white);
-		g.drawString(Float.toString(player.getHealth()), 0, 570);
+		g.drawString("Health : " + Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override
@@ -112,7 +112,10 @@ public class Dungeon2 extends BasicGameState {
 			player.setDir(3);
 		} else if (input.isKeyPressed(input.KEY_SPACE)) { 
 			fireballs.add(new FireBall(player.getX(), player.getY(), 20, 20, player.getDir()));
-		} 
+		} else if (input.isKeyPressed(input.KEY_H))
+			sbg.enterState(7);
+		else if (input.isKeyPressed(input.KEY_I))
+			sbg.enterState(8);
 		
 		for (FireBall f : fireballs) {
 			f.update();
@@ -150,6 +153,9 @@ public class Dungeon2 extends BasicGameState {
 				player.setY(rand.nextInt(560));
 			}
 		}
+		
+		if (player.getHealth() <= 0)
+			sbg.enterState(10);
 	}
 	
 	public boolean collide(FireBall f, Enemy e) {

@@ -42,6 +42,16 @@ public class Player {
 	public Rectangle bounds() {
 		return new Rectangle(this.x, this.y, this.width, this.height);
 	}
+	
+	public boolean collide(Item i) {
+		Rectangle p = this.bounds();
+		Rectangle item = i.bounds();
+		
+		if (p.intersects(item))
+			return true;
+		else
+			return false;
+	}
 
 	//Getters and Setters
 	public int getX() {

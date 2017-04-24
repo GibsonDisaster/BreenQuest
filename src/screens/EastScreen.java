@@ -52,7 +52,7 @@ public class EastScreen extends BasicGameState {
 			fireball.draw(f.getX(), f.getY());
 		}
 		g.setColor(Color.white);
-		g.drawString(Float.toString(player.getHealth()), 0, 570);
+		g.drawString("Health : " + Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override
@@ -77,6 +77,9 @@ public class EastScreen extends BasicGameState {
 			sbg.enterState(7);
 		else if (input.isKeyPressed(input.KEY_I))
 			sbg.enterState(8);
+		else if (input.isKeyPressed(input.KEY_E))
+			if (player.getX() > 600 && player.getX() < 640 && player.getY() > 300 && player.getY() < 340)
+				sbg.enterState(11);
 		
 		for (FireBall f : fireballs) {
 			f.update();
@@ -84,6 +87,9 @@ public class EastScreen extends BasicGameState {
 		
 		if (player.getX() < 0)
 			sbg.enterState(1);
+		
+		if (player.getHealth() <= 0)
+			sbg.enterState(10);
 	}
 
 	@Override

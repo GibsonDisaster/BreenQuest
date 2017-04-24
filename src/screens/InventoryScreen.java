@@ -52,6 +52,12 @@ public class InventoryScreen extends BasicGameState {
 				case "hub":
 					sbg.enterState(1);
 					break;
+				case "dungeon1":
+					sbg.enterState(6);
+					break;
+				case "dungeon2":
+					sbg.enterState(9);
+					break;
 			}
 		}
 	}

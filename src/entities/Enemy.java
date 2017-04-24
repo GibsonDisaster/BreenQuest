@@ -57,6 +57,16 @@ public class Enemy {
 		else
 			return false;
 	}
+	
+	public boolean collide(Player f) {
+		Rectangle r1 = new Rectangle(this.x, this.y, this.width, this.height);
+		Rectangle r2 = new Rectangle(f.getX(), f.getY(), f.getWidth(), f.getHeight());
+		
+		if (r2.intersects(r1))
+			return true;
+		else
+			return false;
+	}
 
 	//Getters and Setters
 	public int getX() {

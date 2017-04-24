@@ -65,7 +65,7 @@ public class SouthScreen extends BasicGameState {
 			fireball.draw(f.getX(), f.getY());
 		}
 		g.setColor(Color.white);
-		g.drawString(Float.toString(player.getHealth()), 0, 570);
+		g.drawString("Health : " + Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override
@@ -101,6 +101,9 @@ public class SouthScreen extends BasicGameState {
 				}
 			}
 		}
+		
+		if (player.getHealth() <= 0)
+			sbg.enterState(10);
 		
 		for (Animal a : animals) {
 			a.pickRandLocation();

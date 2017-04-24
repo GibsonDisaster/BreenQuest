@@ -92,7 +92,7 @@ public class Dungeon1 extends BasicGameState {
 		
 		player_img.draw(player.getX(), player.getY());
 		g.setColor(Color.white);
-		g.drawString(Float.toString(player.getHealth()), 0, 570);
+		g.drawString("Health : " + Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override
@@ -117,6 +117,10 @@ public class Dungeon1 extends BasicGameState {
 			firstSwitch();
 		else if (player.getX() > 480 && player.getX() < 540 && player.getY() > 200 && player.getY() < 260 && input.isKeyPressed(input.KEY_E) && !second)
 			secondSwitch();
+		else if (input.isKeyPressed(input.KEY_H))
+			sbg.enterState(7);
+		else if (input.isKeyPressed(input.KEY_I))
+			sbg.enterState(8);
 		
 		for (FireBall f : fireballs) {
 			f.update();
@@ -154,6 +158,9 @@ public class Dungeon1 extends BasicGameState {
 		
 		if (player.getX() > 50 && player.getX() < 130 && player.getY() > 100 && player.getY() < 140 && input.isKeyPressed(input.KEY_E))
 			sbg.enterState(2);
+		
+		if (player.getHealth() <= 0)
+			sbg.enterState(10);
 	}
 	
 	public void firstSwitch() {

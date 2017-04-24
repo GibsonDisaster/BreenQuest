@@ -74,7 +74,7 @@ public class WestScreen extends BasicGameState {
 		}
 		
 		g.setColor(Color.white);
-		g.drawString(Float.toString(player.getHealth()), 0, 570);
+		g.drawString("Health : " + Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class WestScreen extends BasicGameState {
 		for (FireBall f : fireballs) {
 			f.update();
 			for (Enemy e : enemies) {
-				if (e.collide(f)) {
+				if (e.collide(f) && e.isAlive()) {
 					e.takeDamage(f.getDamage());
 					f.setX(543433);
 				}
@@ -115,6 +115,9 @@ public class WestScreen extends BasicGameState {
 				e.getLocation();
 				e.follow();
 			}
+			
+			if (e.collide(player))
+				player.takeDamage(.02f);
 			
 			if (e.getHealth() <= 0)
 				e.setAlive(false);
@@ -128,6 +131,9 @@ public class WestScreen extends BasicGameState {
 		if (player.getX() > 150 && player.getX() < 270)
 			if (player.getY() > 200 && player.getY() + player.getHeight() < 260 && input.isKeyPressed(input.KEY_E))
 				sbg.enterState(9);
+		
+		if (player.getHealth() <= 0)
+			sbg.enterState(10);
 	}
 
 	@Override

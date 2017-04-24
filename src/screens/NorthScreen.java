@@ -49,8 +49,9 @@ public class NorthScreen extends BasicGameState {
 		for (FireBall f : fireballs) {
 			fireball.draw(f.getX(), f.getY());
 		}
+		
 		g.setColor(Color.white);
-		g.drawString(Float.toString(player.getHealth()), 0, 570);
+		g.drawString("Health : " + Float.toString(player.getHealth()), 0, 570);
 	}
 
 	@Override

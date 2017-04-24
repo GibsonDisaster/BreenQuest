@@ -6,7 +6,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
-import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Player;
@@ -37,7 +36,7 @@ public class HelpScreen extends BasicGameState {
 		Input i = gc.getInput();
 		player = WorldMap.getPlayer();
 		
-		if (i.isKeyPressed(i.KEY_E)) {
+		if (i.isKeyPressed(i.KEY_H)) {
 			switch(player.getLastScreen()) {
 				case "east":
 					sbg.enterState(4);
@@ -53,6 +52,12 @@ public class HelpScreen extends BasicGameState {
 					break;
 				case "hub":
 					sbg.enterState(1);
+					break;
+				case "dungeon1":
+					sbg.enterState(6);
+					break;
+				case "dungeon2":
+					sbg.enterState(9);
 					break;
 			}
 		}

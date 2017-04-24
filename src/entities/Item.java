@@ -1,5 +1,7 @@
 package entities;
 
+import java.awt.Rectangle;
+
 public class Item {
 	
 	private int x, y, width, height;
@@ -13,6 +15,10 @@ public class Item {
 		this.height = height;
 		this.name = name;
 		this.pickedUp = pickedUp;
+	}
+	
+	public Rectangle bounds() {
+		return new Rectangle(this.x, this.y, this.width, this.height);
 	}
 
 	//Getters and Setters
