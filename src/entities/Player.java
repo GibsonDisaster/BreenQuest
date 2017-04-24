@@ -25,16 +25,16 @@ public class Player {
 	public void move(String dir) {
 		switch(dir) {
 		case "up":
-			this.y -= 10;
+			this.y -= 4f;
 			break;
 		case "down":
-			this.y += 10;
+			this.y += 4f;
 			break;
 		case "left":
-			this.x -= 10;
+			this.x -= 4f;
 			break;
 		case "right":
-			this.x += 10;
+			this.x += 4f;
 			break;
 		}
 	}

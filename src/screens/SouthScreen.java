@@ -18,7 +18,7 @@ import entities.Player;
 public class SouthScreen extends BasicGameState {
 
 	private Player player;
-	private Image south, player_img, sheep_img, fireball;
+	private Image south, player_img, sheep_img, sheep_burning, fireball;
 	private ArrayList<Animal> animals;
 	private ArrayList<FireBall> fireballs;
 	
@@ -46,6 +46,7 @@ public class SouthScreen extends BasicGameState {
 		player_img = new Image("res/player.png");
 		sheep_img = new Image("res/sheep.png");
 		fireball = new Image("res/fireball.png");
+		sheep_burning = new Image("res/burning_sheep.png");
 	}
 
 	@Override
@@ -54,7 +55,10 @@ public class SouthScreen extends BasicGameState {
 		player_img.draw(player.getX(), player.getY());
 		
 		for (Animal a : animals) {
-			sheep_img.draw(a.getX(), a.getY());
+			if(a.isOnFire())
+				sheep_burning.draw(a.getX(), a.getY());
+			else
+				sheep_img.draw(a.getX(), a.getY());
 		}
 		
 		for (FireBall f : fireballs) {
@@ -87,8 +91,15 @@ public class SouthScreen extends BasicGameState {
 		else if (input.isKeyPressed(input.KEY_I))
 			sbg.enterState(8);
 		
+		if (fireballs.size() > 0)
 		for (FireBall f : fireballs) {
 			f.update();
+			for (Animal a : animals) {
+				if (a.collide(f)) {
+					a.setOnFire(true);
+					f.setX(6000);
+				}
+			}
 		}
 		
 		for (Animal a : animals) {

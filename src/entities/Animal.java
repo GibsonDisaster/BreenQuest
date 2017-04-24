@@ -1,11 +1,13 @@
 package entities;
 
+import java.awt.Rectangle;
 import java.util.Random;
 
 public class Animal {
 	
 	private int x, y, width, height;
 	boolean picked = false;
+	boolean onFire = false;
 	Random rand = new Random();
 	int newX = this.x;
 	int newY = this.y;
@@ -43,8 +45,26 @@ public class Animal {
 			picked = false;
 		}
 	}
+	
+	public boolean collide(FireBall f) {
+		Rectangle rect1 = new Rectangle(this.x, this.y, this.width, this.height);
+		Rectangle rect2 = f.bounds();
+		
+		if (rect2.intersects(rect1))
+			return true;
+		else
+			return false;
+	}
 
 	//Getters and Setters
+	public boolean isOnFire() {
+		return this.onFire;
+	}
+	
+	public void setOnFire(boolean f) {
+		this.onFire = f;
+	}
+	
 	public int getX() {
 		return x;
 	}

@@ -5,8 +5,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import screens.WorldMap;
 import screens.Dungeon1;
+import screens.Dungeon2;
 import screens.EastScreen;
 import screens.HelpScreen;
 import screens.InventoryScreen;
@@ -14,6 +14,7 @@ import screens.NorthScreen;
 import screens.SouthScreen;
 import screens.StartScreen;
 import screens.WestScreen;
+import screens.WorldMap;
 
 public class Main extends StateBasedGame {
 	
@@ -26,6 +27,7 @@ public class Main extends StateBasedGame {
 	private final int d1 = 6;
 	private final int helpscreen = 7;
 	private final int invscreen = 8;
+	private final int d2 = 9;
 	private final static int WIDTH = 800;
 	private final static int HEIGHT = 600;
 
@@ -39,6 +41,7 @@ public class Main extends StateBasedGame {
 		this.addState(new SouthScreen(southScreen));
 		this.addState(new HelpScreen(helpscreen));
 		this.addState(new Dungeon1(d1));
+		this.addState(new Dungeon2(d2));
 		this.addState(new InventoryScreen(invscreen));
 	}
 	
@@ -67,6 +70,7 @@ public class Main extends StateBasedGame {
 		this.getState(d1).init(gc, this);
 		this.getState(helpscreen).init(gc, this);
 		this.getState(invscreen).init(gc, this);
+		this.getState(d2).init(gc, this);
 		this.enterState(startMenu);
 	}
 

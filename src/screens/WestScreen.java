@@ -11,23 +11,32 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import entities.Enemy;
 import entities.FireBall;
 import entities.Player;
 
 public class WestScreen extends BasicGameState {
 
 	private Player player;
-	private Image westScreen, player_img, fireball, d1_entrance;
+	private Image westScreen, player_img, fireball, d1_entrance, d2_entrance, ogre_img, ogre_dead;
 	private ArrayList<FireBall> fireballs;
+	private ArrayList<Enemy> enemies;
 	
 	public WestScreen(int westScreen) {
 		player = WorldMap.getPlayer();
 		fireballs = new ArrayList<>();
+		enemies = new ArrayList<>();
+		enemies.add(new Enemy(10, 20, 40, 40, 8, "ogre"));
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) {
 		if (player.getLastScreen().equals("hub"))
 			player.setX(760);
+		else if (player.getLastScreen().equals("dungeon2")) {
+			player.setX(170);
+			player.setY(220);
+		}
+		
 		player.setLastScreen("west");
 	}
 	
@@ -41,17 +50,29 @@ public class WestScreen extends BasicGameState {
 		player_img = new Image("res/player.png");
 		fireball = new Image("res/fireball.png");
 		d1_entrance = new Image("res/d1_entrance.png");
+		d2_entrance = new Image("res/d1_entrance.png");
+		ogre_img = new Image("res/ogre.png");
+		ogre_dead = new Image("res/ogre_dead.png");
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		westScreen.draw(0, 0);
 		d1_entrance.draw(50, 100); //120 x 60
+		d2_entrance.draw(150, 200);
 		player_img.draw(player.getX(), player.getY());
 		
 		for (FireBall f : fireballs) {
 			fireball.draw(f.getX(), f.getY());
 		}
+		
+		for (Enemy e : enemies) {
+			if (e.isAlive())
+				ogre_img.draw(e.getX(), e.getY());
+			else 
+				ogre_dead.draw(e.getX(), e.getY());
+		}
+		
 		g.setColor(Color.white);
 		g.drawString(Float.toString(player.getHealth()), 0, 570);
 	}
@@ -81,13 +102,32 @@ public class WestScreen extends BasicGameState {
 		
 		for (FireBall f : fireballs) {
 			f.update();
+			for (Enemy e : enemies) {
+				if (e.collide(f)) {
+					e.takeDamage(f.getDamage());
+					f.setX(543433);
+				}
+			}
+		}
+		
+		for (Enemy e : enemies) {
+			if (e.isAlive()) {
+				e.getLocation();
+				e.follow();
+			}
+			
+			if (e.getHealth() <= 0)
+				e.setAlive(false);
 		}
 		
 		if (player.getX() > 800)
 			sbg.enterState(1);
 		if (player.getX() > 50 && player.getX() < 170)
-			if (player.getY() > 100 && player.getY() < 160 && input.isKeyPressed(input.KEY_E))
+			if (player.getY() > 100 && player.getY() + player.getHeight() < 160 && input.isKeyPressed(input.KEY_E))
 				sbg.enterState(6);
+		if (player.getX() > 150 && player.getX() < 270)
+			if (player.getY() > 200 && player.getY() + player.getHeight() < 260 && input.isKeyPressed(input.KEY_E))
+				sbg.enterState(9);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 import entities.Player;
 
 public class InventoryScreen extends BasicGameState {
@@ -26,6 +27,8 @@ public class InventoryScreen extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		background.draw(0, 0);
+		if (player.isScepter())
+			g.drawString("Scepter", 20, 20);
 	}
 
 	@Override

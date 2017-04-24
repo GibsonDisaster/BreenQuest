@@ -2,6 +2,7 @@ package screens;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -15,28 +16,32 @@ import org.newdawn.slick.state.StateBasedGame;
 import entities.Enemy;
 import entities.FireBall;
 import entities.Player;
+import entities.TeleportTile;
 
-public class Dungeon1 extends BasicGameState {
+public class Dungeon2 extends BasicGameState {
 
+	private Random rand;
 	private Player player;
-	private Image dungeon1_map, player_img, fireball, exit, ogre_img, behemoth_img, ogre_dead, behemoth_dead;
+	private Image dungeon1_map, player_img, fireball, exit, ogre_img, behemoth_img, ogre_dead, behemoth_dead, teleport_tile, toilet;
 	private ArrayList<FireBall> fireballs;
 	private ArrayList<Enemy> enemies;
-	private Color one, two, three;
-	private boolean first, second, third;
+	private ArrayList<TeleportTile> tiles;
 	
-	public Dungeon1(int westScreen) {
+	public Dungeon2(int westScreen) {
+		rand = new Random();
 		player = WorldMap.getPlayer();
 		fireballs = new ArrayList<>();
 		fireballs.add(new FireBall(900, player.getY(), 20, 20, 0));
 		enemies = new ArrayList<>();
-		one = Color.blue;
-		two = Color.blue;
-		three = Color.darkGray;
+		enemies.add(new Enemy(400, 399, 120, 120, 80, "toilet"));
+		tiles = new ArrayList<>();
+		tiles.add(new TeleportTile(600, 600));
+		tiles.add(new TeleportTile(600, 100));
+		tiles.add(new TeleportTile(400, 200));
 	}
 
 	public void enter(GameContainer gc, StateBasedGame sbg) {
-		player.setLastScreen("dungeon1");
+		player.setLastScreen("dungeon2");
 	}
 	
 	public void leave(GameContainer gc, StateBasedGame sbg) {
@@ -50,15 +55,19 @@ public class Dungeon1 extends BasicGameState {
 		fireball = new Image("res/fireball.png");
 		exit = new Image("res/d1_exit.png");
 		ogre_img = new Image("res/ogre.png");
-		behemoth_img = new Image("res/behemoth.png");
 		ogre_dead = new Image("res/ogre_dead.png");
-		behemoth_dead = new Image("res/behemoth_dead.png");
+		teleport_tile = new Image("res/teleport_tile.png");
+		toilet = new Image("res/toilet.png");
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		dungeon1_map.draw(0, 0);
 		exit.draw(50, 100);
+		
+		for (TeleportTile t : tiles) {
+			teleport_tile.draw(t.getX(), t.getY());
+		}
 		
 		for (FireBall f : fireballs) {
 			fireball.draw(f.getX(), f.getY());
@@ -70,6 +79,8 @@ public class Dungeon1 extends BasicGameState {
 					ogre_img.draw(e.getX(), e.getY());
 				else if (e.getName().equals("behemoth"))
 					behemoth_img.draw(e.getX(), e.getY());
+				else if (e.getName().equals("toilet"))
+					toilet.draw(e.getX(), e.getY());
 			} else {
 				if (e.getName().equals("ogre"))
 					ogre_dead.draw(e.getX(), e.getY());
@@ -77,18 +88,6 @@ public class Dungeon1 extends BasicGameState {
 					behemoth_dead.draw(e.getX(), e.getY());
 			}
 		}
-		
-		if (third)
-			thirdSwitch(g);
-		
-		g.setColor(one);
-		g.fillRect(400, 200, 60, 60);
-		
-		g.setColor(two);
-		g.fillRect(480, 200, 60, 60);
-		
-		g.setColor(three);
-		g.fillRect(540, 200, 60, 60);
 		
 		player_img.draw(player.getX(), player.getY());
 		g.setColor(Color.white);
@@ -113,28 +112,21 @@ public class Dungeon1 extends BasicGameState {
 			player.setDir(3);
 		} else if (input.isKeyPressed(input.KEY_SPACE)) { 
 			fireballs.add(new FireBall(player.getX(), player.getY(), 20, 20, player.getDir()));
-		} else if (player.getX() > 400 && player.getX() < 460 && player.getY() > 200 && player.getY() < 260 && input.isKeyPressed(input.KEY_E) && !first)
-			firstSwitch();
-		else if (player.getX() > 480 && player.getX() < 540 && player.getY() > 200 && player.getY() < 260 && input.isKeyPressed(input.KEY_E) && !second)
-			secondSwitch();
+		} 
 		
 		for (FireBall f : fireballs) {
 			f.update();
-			for (Enemy e : enemies) {
-				if (e.getName().equals("behemoth") && e.isAlive()  == false)
-					third = true;
-				
+			for (Enemy e : enemies) {				
 				if (collide(f, e) && e.isAlive()) {
 					e.takeDamage(f.getDamage());
 					f.setX(6000);
 				}
-				if (e.getHealth() <= 0)
-					e.setAlive(false);
-				System.out.println(e.getHealth());
 			}
 		}
 		
 		for (Enemy e : enemies) {
+			if (e.getHealth() <= 0)
+				e.setAlive(false);
 			if (e.isAlive()) {
 				e.getLocation();
 				e.follow();
@@ -144,9 +136,6 @@ public class Dungeon1 extends BasicGameState {
 			}
 		}
 		
-		if (first && second)
-			three = Color.green;
-		
 		for (int i = 0; i < fireballs.size()-1; i++) {
 			if (fireballs.get(i).getX() > 800 || fireballs.get(i).getX() < 0 || fireballs.get(i).getY() > 600 || fireballs.get(i).getY() < 0)
 				fireballs.remove(i);
@@ -154,25 +143,13 @@ public class Dungeon1 extends BasicGameState {
 		
 		if (player.getX() > 50 && player.getX() < 130 && player.getY() > 100 && player.getY() < 140 && input.isKeyPressed(input.KEY_E))
 			sbg.enterState(2);
-	}
-	
-	public void firstSwitch() {
-		enemies.add(new Enemy(600, 100, 40, 40, 6, "ogre"));
-		enemies.add(new Enemy(150, 300, 40, 40, 6, "ogre"));
-		enemies.add(new Enemy(400, 500, 40, 40, 6, "ogre"));
-		one = Color.red;
-		first = true;
-	}
-	
-	public void secondSwitch() {
-		enemies.add(new Enemy(150, 300, 200, 200, 32, "behemoth"));
-		two = Color.red;
-		second = true;
-	}
-	
-	public void thirdSwitch(Graphics g) {
-		player.setScepter(true);
-		g.drawString("You got the scepter", 140, 100);
+		
+		for (TeleportTile t : tiles) {
+			if (t.collide(player)) {
+				player.setX(rand.nextInt(760));
+				player.setY(rand.nextInt(560));
+			}
+		}
 	}
 	
 	public boolean collide(FireBall f, Enemy e) {
@@ -197,7 +174,7 @@ public class Dungeon1 extends BasicGameState {
 
 	@Override
 	public int getID() {
-		return 6;
+		return 9;
 	}
 
 }

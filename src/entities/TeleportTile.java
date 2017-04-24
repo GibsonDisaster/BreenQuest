@@ -1,18 +1,25 @@
 package entities;
 
-public class Item {
-	
+import java.awt.Rectangle;
+
+public class TeleportTile {
 	private int x, y, width, height;
-	private String name;
-	private boolean pickedUp;
-	
-	public Item(int x, int y, int width, int height, String name, boolean pickedUp) {
+
+	public TeleportTile(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.name = name;
-		this.pickedUp = pickedUp;
+		this.width = 40;
+		this.height = 40;
+	}
+	
+	public boolean collide(Player p) {
+		Rectangle rect1 = new Rectangle(this.x, this.y, this.width, this.height);
+		Rectangle rect2 = new Rectangle(p.getX(), p.getY(), p.getWidth(), p.getHeight());
+		
+		if (rect2.intersects(rect1))
+			return true;
+		else
+			return false;
 	}
 
 	//Getters and Setters
@@ -47,21 +54,6 @@ public class Item {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean isPickedUp() {
-		return pickedUp;
-	}
-
-	public void setPickedUp(boolean pickedUp) {
-		this.pickedUp = pickedUp;
-	}
 	
 }
+
